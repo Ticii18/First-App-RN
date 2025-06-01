@@ -10,7 +10,10 @@ import {
 } from "react-native";
 import SearchBar from "../components/SearchBar";
 import SubregionNav from "../components/SubregionNav";
-import { getAllCountries } from "../services/Api";
+import {
+  getAllCountries,
+  getCountryByRegion,
+} from "../services/Api";
 
 export default function CountryScreen() {
   const [allCountries, setAllCountries] = useState([]);
@@ -51,12 +54,7 @@ export default function CountryScreen() {
       }
       try {
         setLoading(true);
-        const response = await fetch(
-          `https://restcountries.com/v3.1/subregion/${encodeURIComponent(
-            selectedSubregion
-          )}`
-        );
-        const data = await response.json();
+        const data = await getCountryByRegion(selectedSubregion);
         const sorted = data.sort((a, b) =>
           a.name.common.localeCompare(b.name.common)
         );
@@ -99,8 +97,8 @@ export default function CountryScreen() {
           setVisibleCount(20);
         }}
       />
-      {loading && (
-        <ActivityIndicator size="large" color="#0000ff" className="mt-4" />
+      {loading && visibleCountries.length === 0 && (
+        <Text className="text-center mt-4">Cargando países...</Text>
       )}
       {error && <Text className="text-center text-red-500 mt-2">{error}</Text>}
 

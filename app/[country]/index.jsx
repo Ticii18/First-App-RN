@@ -51,8 +51,10 @@ export default function CountryDetails() {
 
   if (!name) {
     return (
-      <SafeAreaView className="flex-1 justify-center items-center p-4">
-        <Text>No se recibió el nombre del país.</Text>
+      <SafeAreaView className="flex-1 justify-center items-center p-4 bg-white">
+        <Text className="text-red-600 text-center text-lg mb-4">
+          No se recibió el nombre del país.
+        </Text>
         <Button title="Volver" onPress={() => router.back()} />
       </SafeAreaView>
     );
@@ -60,16 +62,16 @@ export default function CountryDetails() {
 
   if (loading) {
     return (
-      <SafeAreaView className="flex-1 justify-center items-center">
-        <ActivityIndicator size="large" color="#0000ff" />
+      <SafeAreaView className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" color="#2563eb" />
       </SafeAreaView>
     );
   }
 
   if (error) {
     return (
-      <SafeAreaView className="flex-1 justify-center items-center p-4">
-        <Text className="text-red-600">{error}</Text>
+      <SafeAreaView className="flex-1 justify-center items-center p-4 bg-white">
+        <Text className="text-red-600 text-lg mb-4">{error}</Text>
         <Button title="Volver" onPress={() => router.back()} />
       </SafeAreaView>
     );
@@ -77,85 +79,88 @@ export default function CountryDetails() {
 
   if (!country) {
     return (
-      <SafeAreaView className="flex-1 justify-center items-center p-4">
-        <Text>Cargando detalles del país...</Text>
+      <SafeAreaView className="flex-1 justify-center items-center p-4 bg-white">
+        <Text className="text-gray-700 text-lg">Cargando detalles del país...</Text>
       </SafeAreaView>
     );
   }
 
   return (
     <SafeAreaView className="flex-1 p-4 bg-white">
-      <ScrollView>
-        <Text className="text-3xl font-bold mb-4">
+      <ScrollView className="space-y-6">
+        <Text className="text-4xl font-bold text-center text-blue-900">
           {country?.name?.common || "Nombre no disponible"}
         </Text>
 
         {country?.flags?.png && (
           <Image
             source={{ uri: country.flags.png }}
-            style={{ width: "100%", height: 200, marginBottom: 16 }}
+            style={{ width: "100%", height: 200 }}
+            className="rounded-lg shadow-md"
             resizeMode="contain"
           />
         )}
 
-        <View className="mb-4">
-          <Text className="text-lg">
-            <Text className="font-semibold">Nombre oficial: </Text>
-            <Text>{country?.name?.official || "No disponible"}</Text>
+        <View className="bg-gray-100 p-4 rounded-xl shadow-sm">
+          <Text className="text-xl font-semibold mb-2 text-blue-800">
+            Información general
           </Text>
-          <Text className="text-lg">
-            <Text className="font-semibold">Capital: </Text>
+          <Text className="text-base">
+            <Text className="font-medium">Nombre oficial:</Text>{" "}
+            {country?.name?.official || "No disponible"}
+          </Text>
+          <Text className="text-base">
+            <Text className="font-medium">Capital:</Text>{" "}
             {country?.capital ? country.capital.join(", ") : "No disponible"}
           </Text>
-          <Text className="text-lg">
-            <Text className="font-semibold">Región: </Text>
-            {country?.region || "No disponible"}
+          <Text className="text-base">
+            <Text className="font-medium">Región:</Text> {country?.region || "No disponible"}
           </Text>
-          <Text className="text-lg">
-            <Text className="font-semibold">Subregión: </Text>
+          <Text className="text-base">
+            <Text className="font-medium">Subregión:</Text>{" "}
             {country?.subregion || "No disponible"}
           </Text>
-          <Text className="text-lg">
-            <Text className="font-semibold">Población: </Text>
-            {country?.population
-              ? country.population.toLocaleString()
-              : "No disponible"}
+          <Text className="text-base">
+            <Text className="font-medium">Población:</Text>{" "}
+            {country?.population?.toLocaleString() || "No disponible"}
           </Text>
-          <Text className="text-lg">
-            <Text className="font-semibold">Área: </Text>
-            {country?.area
-              ? country.area.toLocaleString() + " km²"
-              : "No disponible"}
+          <Text className="text-base">
+            <Text className="font-medium">Área:</Text>{" "}
+            {country?.area?.toLocaleString() + " km²" || "No disponible"}
           </Text>
         </View>
 
-        <View className="mb-4">
-          <Text className="font-semibold text-lg mb-2">Moneda:</Text>
+        <View className="bg-gray-100 p-4 rounded-xl shadow-sm">
+          <Text className="text-xl font-semibold mb-2 text-blue-800">Moneda</Text>
           {country?.currencies ? (
             Object.values(country.currencies).map((currency) => (
-              <Text key={currency.name} className="text-lg">
+              <Text key={currency.name} className="text-base">
                 {currency.name} ({currency.symbol})
               </Text>
             ))
           ) : (
-            <Text className="text-lg">No disponible</Text>
+            <Text>No disponible</Text>
           )}
         </View>
 
-        <View className="mb-4">
-          <Text className="font-semibold text-lg mb-2">Idiomas:</Text>
+        <View className="bg-gray-100 p-4 rounded-xl shadow-sm">
+          <Text className="text-xl font-semibold mb-2 text-blue-800">Idiomas</Text>
           {country?.languages ? (
-            <Text className="text-lg">
+            <Text className="text-base">
               {Object.values(country.languages).join(", ")}
             </Text>
           ) : (
-            <Text className="text-lg">No disponible</Text>
+            <Text>No disponible</Text>
           )}
         </View>
-        <Button
-          title="Ver más detalles"
-          onPress={() => router.push(`/country/${name}/details`)}
-        />
+
+        <View className="mt-4">
+          <Button
+            title="Ver más detalles"
+            onPress={() => router.push(`/country/${name}/details`)}
+            color="#2563eb"
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
