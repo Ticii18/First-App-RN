@@ -2,22 +2,24 @@ import { Tabs } from "expo-router";
 
 export default function ScreensLayout() {
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        headerShown: false, 
+      }}
+    >
       <Tabs.Screen
         name="Dashboard"
-        options={{ title: "Dashboard", headerShown: false }}
+        options={{ title: "Dashboard" }}
       />
       <Tabs.Screen
         name="ViewCountrys"
-        options={{ title: "Países", headerShown: false }}
+        options={{ title: "Países" }}
       />
       <Tabs.Screen
-        name="logout"
-        options={{
-          title: "Cerrar sesión",
-          tabBarLabelStyle: { color: "red" },
-        }}
+        name="Logout"
+        options={{ title: "Cerrar sesión", tabBarLabelStyle: { color: "red" } }}
       />
+      
     </Tabs>
   );
 }

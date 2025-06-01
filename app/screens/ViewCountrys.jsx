@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  FlatList,
   SafeAreaView,
-  ScrollView,
-  Text
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import CountryCard from "../components/CountryCards";
-import LoadMoreButton from "../components/LoadMoreButton";
 import SearchBar from "../components/SearchBar";
 import SubregionNav from "../components/SubregionNav";
 import { getAllCountries } from "../services/Api";
@@ -14,11 +15,12 @@ import { getAllCountries } from "../services/Api";
 export default function CountryScreen() {
   const [allCountries, setAllCountries] = useState([]);
   const [search, setSearch] = useState("");
-  const [visibleCount, setVisibleCount] = useState(10);
+  const [visibleCount, setVisibleCount] = useState(20);
   const [loading, setLoading] = useState(false);
   const [selectedSubregion, setSelectedSubregion] = useState(null);
   const [error, setError] = useState(null);
   const [filteredCountries, setFilteredCountries] = useState([]);
+  const router = useRouter();
 
   const subregions = ["South America", "Western Europe", "Southeast Asia"];
 
@@ -74,13 +76,19 @@ export default function CountryScreen() {
     );
 
   const countriesToShow = handleSearch();
+
   const visibleCountries =
     selectedSubregion || search
       ? countriesToShow
       : countriesToShow.slice(0, visibleCount);
 
+  const loadMore = () => {
+    if (visibleCount >= countriesToShow.length) return;
+    setVisibleCount((prev) => prev + 10);
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView className="flex-1 bg-white">
       <SearchBar value={search} onChange={setSearch} />
       <SubregionNav
         subregions={subregions}
@@ -88,21 +96,40 @@ export default function CountryScreen() {
         onSelect={(region) => {
           setSelectedSubregion(region);
           setSearch("");
-          setVisibleCount(10);
+          setVisibleCount(20);
         }}
       />
-      {loading && <ActivityIndicator size="large" color="#0000ff" />}
-      {error && <Text style={{ textAlign: "center", color: "red" }}>{error}</Text>}
-      <ScrollView>
-        {visibleCountries.map((country) => (
-          <CountryCard key={country.cca3} countryName={country.name.common} />
-        ))}
-        {!selectedSubregion &&
-          !search &&
-          visibleCount < countriesToShow.length && (
-            <LoadMoreButton onPress={() => setVisibleCount(visibleCount + 10)} />
-          )}
-      </ScrollView>
+      {loading && (
+        <ActivityIndicator size="large" color="#0000ff" className="mt-4" />
+      )}
+      {error && <Text className="text-center text-red-500 mt-2">{error}</Text>}
+
+      <FlatList
+        data={visibleCountries}
+        keyExtractor={(item) => item.cca3}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() =>
+              router.push({
+                pathname: "/[country]",
+                params: { name: item.name.common },
+              })
+            }
+            className="border-b border-gray-300 px-4 py-3"
+          >
+            <Text className="text-lg">{item.name.common}</Text>
+          </TouchableOpacity>
+        )}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.6}
+        ListFooterComponent={() =>
+          visibleCount < countriesToShow.length ? (
+            <View className="py-4">
+              <ActivityIndicator size="small" color="#0000ff" />
+            </View>
+          ) : null
+        }
+      />
     </SafeAreaView>
   );
 }

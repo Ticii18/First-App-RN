@@ -1,0 +1,78 @@
+Listado de rutas de carpetas
+El n�mero de serie del volumen es 0608-448C
+C:.
+�   .gitignore
+�   app.json
+�   babel.config.js
+�   eslint.config.js
+�   estructura.txt
+�   expo-env.d.ts
+�   global.css
+�   metro.config.js
+�   nativewind-env.d.ts
+�   package-lock.json
+�   package.json
+�   README.md
+�   tailwind.config.js
+�   tsconfig.json
+�   
++---.expo
+�   �   devices.json
+�   �   README.md
+�   �   
+�   +---types
+�   �       router.d.ts
+�   �       
+�   +---web
+�       +---cache
+�           +---production
+�               +---images
+�                   +---favicon
+�                       +---favicon-24272cdaeff82cc5facdaccd982a6f05b60c4504704bbf94c19a6388659880bb-contain-transparent
+�                               favicon-48.png
+�                               
++---.vscode
+�       settings.json
+�       
++---app
+�   �   index.jsx
+�   �   _layout.jsx
+�   �   
+�   +---(screens)
+�   �   �   Dashboard.jsx
+�   �   �   Logout.jsx
+�   �   �   ViewCountrys.jsx
+�   �   �   _layout.jsx
+�   �   �   
+�   �   +---[country]
+�   �       �   index.jsx
+�   �       �   _layout.jsx
+�   �       �   
+�   �       +---subregions
+�   �               index.jsx
+�   �               
+�   +---components
+�   �       CountryCards.jsx
+�   �       LoadMoreButton.jsx
+�   �       SearchBar.jsx
+�   �       SubregionNav.jsx
+�   �       
+�   +---services
+�           Api.js
+�           
++---assets
+�   +---fonts
+�   �       SpaceMono-Regular.ttf
+�   �       
+�   +---images
+�           adaptive-icon.png
+�           cerrar-sesion.png
+�           favicon.png
+�           icon.png
+�           paises.png
+�           partial-react-logo.png
+�           react-logo.png
+�           react-logo@2x.png
+�           react-logo@3x.png
+�           splash-icon.png
+�   
