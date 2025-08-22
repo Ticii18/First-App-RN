@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -33,7 +33,7 @@ export default function CountryScreen() {
         setAllCountries(sorted);
         setFilteredCountries(sorted);
       } catch (err) {
-        setError("Error al cargar países.");
+        setError("Api caida");
       } finally {
         setLoading(false);
       }
