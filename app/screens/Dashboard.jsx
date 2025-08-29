@@ -3,15 +3,18 @@ import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 export default function Dashboard() {
-  const { username } = useLocalSearchParams(); 
-
+  const { matches, username } = useLocalSearchParams(); 
   return (
     <View style={styles.container}>
       <Image
         source={{ uri: "https://cdn-icons-png.flaticon.com/512/4202/4202843.png" }}
         style={styles.icon}
       />
-      <Text style={styles.title}>¡Hola, {username}!</Text>
+      {matches ? (
+        <Text style={styles.title}>Bienvenido {matches}</Text>
+      ) : (
+        <Text style={styles.title}>¡Hola, {username}!</Text>
+      )}
       <Text style={styles.subtitle}>
         Has iniciado sesión correctamente.
       </Text>

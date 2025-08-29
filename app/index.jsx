@@ -1,84 +1,54 @@
 import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
+import FaceLogin from "./components/FaceLogin";
+import FaceRegister from "./components/FaceRegister";
 
-import { CameraView, useCameraPermissions } from 'expo-camera';
-
-import { useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
-export default function Login() {
-  const [facing, setFacing] = useState('back');
-  const [permission, requestPermission] = useCameraPermissions();
+export default function MainScreen() {
+  const [cuil, setCuil] = useState("");
+  const [showFaceRegister, setShowFaceRegister] = useState(false);
+  const [showFaceLogin, setShowFaceLogin] = useState(false);
   const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
 
-  function toggleCameraFacing() {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
-  }
-
-  const handleLogin = () => {
-    router.replace({
-      pathname: "/screens/Dashboard",
-      params:{ username },
-    }); 
+  // Registro facial
+  const handleFaceRegister = {
+    cuil,
+    onSuccess: () => {
+      setShowFaceRegister(false);
+      Alert.alert("Registro facial exitoso");
+    },
   };
 
-  if (!permission) {
-    // Camera permissions are still loading.
-    return <View />;
-  }
-
-  if (!permission.granted) {
-    // Camera permissions are not granted yet.
-    return (
-      <View style={styles.container}>
-        <Text style={styles.message}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
-      </View>
-    );
-  }
+  // Login facial
+  const handleFaceLogin = async (recognizedCuil) => {
+    setShowFaceLogin(false);
+    if (recognizedCuil) {
+      router.replace({ pathname: "/screens/Dashboard", params: { cuil: recognizedCuil } });
+    } else {
+      Alert.alert("No se reconoció el rostro");
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      <CameraView style={styles.camera} facing={facing}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-            <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity>
-        </View>
-      </CameraView>
+    <ScrollView>
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20 }}>Registro clásico</Text>
+      <TextInput
+        placeholder="Cuil"
+        value={cuil}
+        onChangeText={setCuil}
+        style={{ borderWidth: 1, marginBottom: 10, padding: 5 }}
+      />
+      <Button title="Registrar rostro" onPress={() => setShowFaceRegister(true)} />
+      <Button title="Ingresar con rostro" onPress={() => setShowFaceLogin(true)} />
 
-      <Button title="Ingresar" onPress={handleLogin} />
+      {showFaceRegister && (
+        <FaceRegister onRegister={handleFaceRegister} />
+      )}
+      {showFaceLogin && (
+        <FaceLogin onSuccess={handleFaceLogin} />
+      )}
     </View>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  message: {
-    textAlign: 'center',
-    paddingBottom: 10,
-  },
-  camera: {
-    flex: 1,
-  },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
-  },
-  button: {
-    flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-});
