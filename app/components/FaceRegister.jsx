@@ -75,12 +75,6 @@ export default function FaceRegister({ onRegister }) {
         const cuil = cuilMatch ? cuilMatch[1] : undefined;
         Alert.alert("Registro facial exitoso", cuil ? `CUIL: ${cuil}` : text);
         onRegister.onSuccess && onRegister.onSuccess();
-      } else if (data) {
-        Alert.alert("No se pudo registrar", data.message || JSON.stringify(data));
-      } else if (text) {
-        Alert.alert("Respuesta inesperada", text);
-      } else {
-        Alert.alert("Error", "No se recibió respuesta del servidor");
       }
     } catch (error) {
       setLoading(false);

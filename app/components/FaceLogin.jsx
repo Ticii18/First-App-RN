@@ -73,12 +73,6 @@ export default function FaceLogin({ onSuccess }) {
             const cuilMatch = text.match(/CUIL\s*"?(\d{8,})"?/i);
             const cuil = cuilMatch ? cuilMatch[1] : undefined;
             if (cuil) onSuccess(cuil);
-        } else if (data) {
-            Alert.alert("No reconocido", data.message || JSON.stringify(data));
-        } else if (text) {
-            Alert.alert("Respuesta inesperada", text);
-        } else {
-            Alert.alert("Error", "No se recibió respuesta del servidor");
         }
     } catch (e) {
         setLoading(false);
